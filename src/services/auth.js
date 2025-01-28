@@ -1,5 +1,5 @@
 import createHttpError from 'http-errors';
-import { User } from '../db/models/User.js';
+import { User } from '../db/models/user.js';
 import { Session } from '../db/models/Session.js';
 import bcrypt from 'bcrypt';
 import {
@@ -7,7 +7,7 @@ import {
     SMTP,
     TEMPLATES_DIR,
     THIRTY_DAYS,
-} from '../constants/index.js';
+} from '../contacts/index.js';
 import { randomBytes } from 'crypto';
 import jwt from 'jsonwebtoken';
 import { env } from '../utils/env.js';
@@ -15,7 +15,11 @@ import { sendEmail } from '../utils/sendMail.js';
 import handlebars from 'handlebars';
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import { getFullNameFromGoogleTokenPayload, validateCode } from '../utils/googleOAuth2.js';
+
+import {
+    getFullNameFromGoogleTokenPayload,
+    validateCode,
+} from '../utils/googleOAuth2.js';
 
 export const registerUser = async (payload) => {
     const user = await User.findOne({ email: payload.email });
@@ -51,9 +55,11 @@ export const loginUser = async (payload) => {
     });
 };
 
+
 export const logoutUser = async (sessionId) => {
     await Session.deleteOne({ _id: sessionId });
 };
+
 
 const createSession = () => {
     const accessToken = randomBytes(30).toString('base64');
@@ -160,6 +166,7 @@ export const resetPassword = async (payload) => {
     await User.updateOne({ _id: user._id }, { password: encryptedPassword });
 };
 
+
 export const loginOrSignupWithGoogle = async (code) => {
     const loginTicket = await validateCode(code);
     const payload = loginTicket.getPayload();
@@ -167,15 +174,17 @@ export const loginOrSignupWithGoogle = async (code) => {
 
     let user = await User.findOne({ email: payload.email });
     if (!user) {
-      const password = await bcrypt.hash(randomBytes(10).toString('base64'), 10);
-      user = await User.create({
-        email: payload.email,
-        name: getFullNameFromGoogleTokenPayload(payload),
-        password,
-        role: 'parent',
-      });
+        const password = await bcrypt.hash(randomBytes(10), 10);
+        user = await User.create({
+            email: payload.email,
+            name: getFullNameFromGoogleTokenPayload(payload),
+            password,
+            role: 'parent',
+        });
     }
-    const newSession = await createSession(user._id);
-
-    return newSession;
-  };
+    const newSession = createSession();
+    return await Session.create({
+        userId: user._id,
+        ...newSession,
+    });
+};

@@ -7,34 +7,34 @@ required:
   - userId
 properties:
   _id:
-    description: 'Contact id'
+    description: 'contacts id'
     type: string
-    example: 65e4decdd286b30065d54af9
+    example: 675c8399c0dd8a4ccbe173fd
   name:
-    description: 'Contact name'
+    description: 'contacts name'
     type: string
     example: 'John Doe'
   phoneNumber:
-    description: 'Contact phone number'
-    type: string
-    example: '+11111111111'
-  email:
-    description: 'Contact email'
-    type: string
-    example: 'example@gmail.com'
+    description: 'contacts phoneNumber'
+    type: number
+    example: +380672222222
   isFavourite:
-    description: 'Is contact favourite?'
+    description: 'contacts favourite status'
     type: boolean
-    example: false
+    example: true
+  email:
+    description: 'Contact email address'
+    type: string
+    example: john.doe@example.com
   contactType:
-    description: 'Contact type'
+    description: 'contacts type'
     type: string
     enum: ['work', 'home', 'personal']
-  userId:
-    description: 'Contact user id'
-    type: string
-    example: 65e4decdd286b30065d54af9
   photo:
-    description: 'Link to contact photo'
+    description: 'Link to contacts photo'
     type: string
-    example: https://res.cloudinary.com/uqwgdu/image/upload/image.png
+    example: https://res.cloudinary.com/dmjx5klte/image/upload/image.png
+  userId:
+    description: 'ID of the user who owns this contact'
+    type: string
+    example: 123e4567-e89b-12d3-a456-426614174000

@@ -2,7 +2,7 @@ import { setupServer } from './server.js';
 import { initMongoConnection } from './db/initMongoConnection.js';
 import dotenv from 'dotenv';
 import { createDirIfNotExists } from './utils/createDirIfNotExists.js';
-import { TEMP_UPLOAD_DIR, UPLOAD_DIR } from './constants/index.js';
+import { TEMP_UPLOAD_DIR, UPLOAD_DIR } from './contacts/index.js';
 
 dotenv.config();
 

@@ -19,9 +19,9 @@ parameters:
   - in: query
     name: sortBy
     schema:
-      type: string
-      example: 'age'
-    description: 'All contact fields can be mentioned. Default value - _id'
+      enum:
+        ['_id', 'name', 'phoneNumber', 'email', 'isFavourite', 'contactType']
+      example: 'name'
   - in: query
     name: sortOrder
     schema:
@@ -32,16 +32,16 @@ parameters:
     name: isFavourite
     schema:
       type: boolean
-      example: false
+      example: true
   - in: query
-    name: type
+    name: contactType
     schema:
       type: string
       enum: ['work', 'home', 'personal']
       example: work
 responses:
   '200':
-    description: Successfully found contacts!
+    description: Successfully found contacts
     content:
       application/json:
         schema:
@@ -56,7 +56,7 @@ responses:
               example: 200
             message:
               type: string
-              example: Successfully found contacts!
+              example: Successfully found contacts
             data:
               type: object
               required:
@@ -74,16 +74,16 @@ responses:
                     $ref: ../../components/schemas/contact.yaml
                 page:
                   type: number
-                  example: 2
+                  example: 1
                 perPage:
                   type: number
-                  example: 4
+                  example: 3
                 totalItems:
                   type: number
-                  example: 4
+                  example: 2
                 totalPages:
                   type: number
-                  example: 4
+                  example: 2
                 hasNextPage:
                   type: boolean
                   example: false

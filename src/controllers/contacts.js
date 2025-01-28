@@ -7,12 +7,12 @@ import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import createHttpError from 'http-errors';
 
-export const getContactsController = async (req, res) => {
+export const getAllContactsController = async (req, res) => {
     const { page, perPage } = parsePaginationParams(req.query);
     const { sortBy, sortOrder } = parseSortParams(req.query);
     const filter = parseFilterParams(req.query);
 
-    const contacts = await contactsService.getContacts({
+    const contacts = await contactsService.getAllContacts({
         userId: req.user._id,
         page,
         perPage,
@@ -26,6 +26,7 @@ export const getContactsController = async (req, res) => {
         data: contacts,
     });
 };
+
 export const getContactByIdController = async (req, res, next) => {
     const { contactId } = req.params;
     try {
@@ -34,15 +35,12 @@ export const getContactByIdController = async (req, res, next) => {
             req.user._id,
         );
         if (!contact) {
-            return res.status(400).json({
-                status: 400,
-                message: 'Contact not found',
+            return res.status(404).json({
+                status: 404,
                 data: {
-                    message: 'Id is not valid',
+                    message: 'Contact not found',
                 },
             });
-
-
         }
         res.status(200).json({
             status: 200,
@@ -50,10 +48,10 @@ export const getContactByIdController = async (req, res, next) => {
             data: contact,
         });
     } catch (error) {
-
         next(error);
     }
 };
+
 export const createContactController = async (req, res) => {
     const photo = req.file;
     let photoUrl;
@@ -77,7 +75,8 @@ export const createContactController = async (req, res) => {
         data: contact,
     });
 };
-export const upsertContactController = async (req, res, next) => {
+
+export const updateContactController = async (req, res, next) => {
     const { contactId } = req.params;
     const photo = req.file;
 
@@ -91,7 +90,7 @@ export const upsertContactController = async (req, res, next) => {
         }
     }
 
-    const result = await contactsService.upsertContact(
+    const result = await contactsService.updateContact(
         contactId,
         {
             ...req.body,
@@ -108,7 +107,7 @@ export const upsertContactController = async (req, res, next) => {
     res.json({
         status: 200,
         message: 'Successfully patched a contact!',
-        data: result.contact,
+        data: result,
     });
 };
 
@@ -122,7 +121,5 @@ export const deleteContactController = async (req, res, next) => {
         next(createHttpError(404, 'Contact not found'));
         return;
     }
-
-
     res.status(204).end();
 };

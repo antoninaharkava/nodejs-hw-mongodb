@@ -1,8 +1,8 @@
 tags:
   - Contacts
 summary: Create contact
-operationId: createContact
-description: 'Create a contact with payload'
+operationId: createContacts
+description: 'Create a contact'
 security:
   - bearerAuth: []
 requestBody:
@@ -16,32 +16,32 @@ requestBody:
           - contactType
         properties:
           name:
-            description: 'Contact name'
+            description: 'Contacts name'
             type: string
-            example: 'John Doe'
+            example: 'Will'
           phoneNumber:
-            description: 'Contact phone number'
+            description: 'Contacts phone number'
             type: string
-            example: '+11111111111'
+            example: +380672222222
           email:
-            description: 'Contact email'
+            description: 'Contacts email'
             type: string
             example: 'example@gmail.com'
           isFavourite:
-            description: 'Is contact favourite?'
+            description: 'Contact favourite status'
             type: boolean
             example: false
           contactType:
-            description: 'Contact type'
+            description: 'Type of contact'
             type: string
             enum: ['work', 'home', 'personal']
           photo:
-            description: 'Link to contact photo'
+            description: 'Contacts photo'
             type: string
             format: binary
 responses:
   '201':
-    description: Created a contact
+    description: Creates a contact
     content:
       application/json:
         schema:
@@ -53,12 +53,12 @@ responses:
           properties:
             status:
               type: integer
-              example: 201
+              example: 200
             message:
               type: string
-              example: Successfully created a contact!
+              example: Successfully created a contact
             data:
               type: object
-              $ref: ../../components/schemas/contact.yaml
+              $ref: '../../components/schemas/contact.yaml'
   '401':
     $ref: '../../components/responses/401.yaml'
