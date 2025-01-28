@@ -1,5 +1,5 @@
 import createHttpError from 'http-errors';
-import { User } from '../db/models/User.js';
+import { User } from '../db/models/user.js';
 import { Session } from '../db/models/Session.js';
 import bcrypt from 'bcrypt';
 import {
@@ -7,7 +7,7 @@ import {
     SMTP,
     TEMPLATES_DIR,
     THIRTY_DAYS,
-} from '../constants/index.js';
+} from '../contacts/index.js';
 import { randomBytes } from 'crypto';
 import jwt from 'jsonwebtoken';
 import { env } from '../utils/env.js';
@@ -158,3 +158,4 @@ export const resetPassword = async (payload) => {
 
     await User.updateOne({ _id: user._id }, { password: encryptedPassword });
 };
+

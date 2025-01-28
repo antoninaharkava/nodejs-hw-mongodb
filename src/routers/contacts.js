@@ -1,17 +1,17 @@
 import express from 'express';
 import {
-    getContactsController,
+    getAllContactsController,
     getContactByIdController,
     createContactController,
     deleteContactController,
-    upsertContactController,
+    updateContactController,
 } from '../controllers/contacts.js';
 import ctrlWrapper from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import {
     createContactSchema,
     updateContactSchema,
-} from '../validations/validationSchema.js';
+} from '../validation/validationSchemas.js';
 import { isValidId } from '../middlewares/isValidId.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import { upload } from '../middlewares/multer.js';
@@ -20,7 +20,7 @@ const router = express.Router();
 const jsonParser = express.json();
 router.use(authenticate);
 
-router.get('/', ctrlWrapper(getContactsController));
+router.get('/', ctrlWrapper(getAllContactsController));
 router.get(
     '/:contactId',
 
@@ -42,7 +42,7 @@ router.patch(
     isValidId,
     upload.single('photo'),
     validateBody(updateContactSchema),
-    ctrlWrapper(upsertContactController),
+    ctrlWrapper(updateContactController),
 );
 router.delete(
     '/:contactId',

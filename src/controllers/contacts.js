@@ -7,12 +7,12 @@ import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import createHttpError from 'http-errors';
 
-export const getContactsController = async (req, res) => {
+export const getAllContactsController = async (req, res) => {
     const { page, perPage } = parsePaginationParams(req.query);
     const { sortBy, sortOrder } = parseSortParams(req.query);
     const filter = parseFilterParams(req.query);
 
-    const contacts = await contactsService.getContacts({
+    const contacts = await contactsService.getAllContacts({
         userId: req.user._id,
         page,
         perPage,
@@ -77,7 +77,7 @@ export const createContactController = async (req, res) => {
         data: contact,
     });
 };
-export const upsertContactController = async (req, res, next) => {
+export const updateContactController = async (req, res, next) => {
     const { contactId } = req.params;
     const photo = req.file;
 
@@ -91,7 +91,7 @@ export const upsertContactController = async (req, res, next) => {
         }
     }
 
-    const result = await contactsService.upsertContact(
+    const result = await contactsService.updateContact(
         contactId,
         {
             ...req.body,
